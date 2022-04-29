@@ -11,7 +11,7 @@ const exhibitionRouter = require('./routes/exhibition.router');
 const app = express();
 const auth = require('./auth');
 const User = require('./model/user.model');
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 8000;
 
 mongoose.connect(process.env.DB_CONNECTION)
 .then((res) => console.log('Connected to database'))
