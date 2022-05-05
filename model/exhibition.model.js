@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 const AutoIncrement = require('mongoose-sequence')(mongoose);
-const exhibitionSchema = mongoose.Schema({
+const exhibitionSchema = new mongoose.Schema({
     name: {
         type: String,
         required: true
@@ -19,5 +19,5 @@ const exhibitionSchema = mongoose.Schema({
     }
 }, {timestamps: true});
 exhibitionSchema.plugin(AutoIncrement, {inc_field: 'exhibitionId'});
-const Exhibition = mongoose.model('exhibition', exhibitionSchema);
+const Exhibition = mongoose.model('exhibitions', exhibitionSchema);
 module.exports = Exhibition;

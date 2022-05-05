@@ -31,27 +31,30 @@ function getExhibitionsByDate(req, res) {
             } else {res.status(400).send(`Exhibition\'s date ${req.params.date} does not exist`)}
         }).catch((err) => {res.status(500).send(err)});
 }
-function postExhibition(req, res) {
-    if (!req.body.name && !req.body.artist && !req.body.picture && !req.body.date) {
-        return res.status(400).send('Exhibition\'s name, artist, picture and date are mandatory');
-    }
-    const Exhibition = new Exhibition({
+//PUT : CREATION
+function putExhibition(req, res) {
+    // if (!req.body.name && !req.body.artist && !req.body.picture && !req.body.date) {
+    //     return res.status(400).send('Exhibition\'s name, artist, picture and date are mandatory');
+    // }
+    const exhibition = new Exhibition({
         name: req.body.name,
         artist: req.body.artist,
         picture: req.body.picture,
         date: req.body.date,
     });
-    Exhibition.save()
+    exhibition.save()
         .then((result) => {
             res.send(result);
         }).catch((err) => {
         res.status(500).send(err);
     });
 }
-function putExhibition(req, res) {
-    if (!req.body.name && !req.body.artist && !req.body.picture && !req.body.date) {
-        return res.status(400).send('Missing Exhibitions');
-    }
+
+//POST : UPDATE
+function postExhibition(req, res) {
+    // if (!req.body.name && !req.body.artist && !req.body.picture && !req.body.date) {
+    //     return res.status(400).send('Missing Exhibitions');
+    // }
     Exhibition.findOneAndUpdate({exhibitionId: req.params.id}, {
         name: req.body.name,
         artist: req.body.artist,
