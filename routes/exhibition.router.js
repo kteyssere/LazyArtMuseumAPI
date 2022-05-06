@@ -6,7 +6,7 @@ exhibitionRouter.get('/', exhibitionsController.getExhibitions);
 exhibitionRouter.get('/:id', exhibitionsController.getExhibition);
 exhibitionRouter.get('/artist/:artist', exhibitionsController.getExhibitionsByArtist);
 exhibitionRouter.get('/date/:date', exhibitionsController.getExhibitionsByDate);
-exhibitionRouter.post('/', exhibitionsController.postExhibition);
+exhibitionRouter.post('/:id', exhibitionsController.postExhibition);
 exhibitionRouter.put('/', exhibitionsController.putExhibition);
 exhibitionRouter.delete('/:id', exhibitionsController.deleteExhibition);
 

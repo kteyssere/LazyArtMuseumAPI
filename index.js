@@ -14,6 +14,9 @@ const auth = require("./auth");
 const User = require('./model/user.model');
 const bcrypt = require('bcryptjs');
 const PORT = process.env.PORT || 8000;
+const nodemailer = require('nodemailer');
+const PDFDocument = require('pdfkit');
+const qr = require("qrcode");
 
 mongoose.connect(process.env.DB_CONNECTION)
 .then((res) => console.log('Connected to database'))
@@ -157,6 +160,65 @@ app.post("/login", async (req, res) => {
 //     req.logout();
 //     res.redirect("/");
 // });
+app.post("/buytickets", async (req, res) => {
+    // console.log("r");
+    // console.log(req.body);
+
+    const url = "www.google.fr";
+
+    // If the input is null return "Empty Data" error
+    //if (url.length === 0) res.send("Empty Data!");
+
+    // Let us convert the input stored in the url and return it as a representation of the QR Code image contained in the Data URI(Uniform Resource Identifier)
+    // It shall be returned as a png image format
+    // In case of an error, it will save the error inside the "err" variable and display it
+    const doc = new PDFDocument();
+    doc.fontSize(27).text('This the article for GeeksforGeeks', 100, 100);
+    qr.toDataURL(url, (err, src) => {
+        if (err) res.send("Error occured");
+
+        // Let us return the QR code image as our response and set it to be the source used in the webpage
+        // doc.image(src, {
+        //     //fit: [300, 300],
+        //     align: 'center',
+        //     valign: 'center'
+        // });
+        //res.render("scan", { src });
+    });
+
+
+
+    doc.end();
+
+    const transporter = nodemailer.createTransport({
+        service: 'gmail',
+        auth: {
+            user: 'lazyartmuseum@gmail.com',
+            pass: 'hvvyrubfsxuqzsdl'
+        }
+    });
+
+    const mailOptions = {
+        from: 'lazyartmuseum@gmail.com',
+        to: req.body.usr.mail,
+        subject: `Your ticket for the ${req.body.exhibition.name} exhibition`,
+        text: `Hello ${req.body.usr.firstname} ! There is your ticket for the ${req.body.exhibition.name} exhibition. 
+        You will have to pay in the museum.`,
+        attachments: [{
+            filename: 'attachment.pdf',
+            content: doc,
+        }],
+    };
+
+    await transporter.sendMail(mailOptions, function (error, info) {
+        if (error) {
+            console.log(error);
+        } else {
+            console.log('Email sent: ' + info.response);
+        }
+    });
+
+});
 
 app.get('/', (req, res) => { res.send('Welcome to my web server'); });
 app.use('/exhibitions', exhibitionRouter);
