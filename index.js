@@ -4,13 +4,10 @@ const swaggerUi = require('swagger-ui-express');
 const jwt = require('jsonwebtoken');
 const express = require('express');
 const cors = require('cors');
-const path = require('path');
 const mongoose = require('mongoose');
 const exhibitionRouter = require('./routes/exhibition.router');
-//const planetRouter = require('./routes/planet.router');
+const userRouter = require('./routes/user.router');
 const app = express();
-// const auth = require('./auth');
-const auth = require("./auth");
 const User = require('./model/user.model');
 const bcrypt = require('bcryptjs');
 const PORT = process.env.PORT || 8000;
@@ -60,17 +57,9 @@ app.use((req, res, next) => {
 });
 app.use(express.json());
 
-// app.post('/login', (req, res) => {
-//     User.findOne({name: req.body.name, password: req.body.name})
-//     .then((result => {
-//         const userobj = {name: req.body.name};
-//         const token = jwt.sign(userobj, process.env.SECRET_TOKEN);
-//         res.json({acessToken: token});
-//     })).catch((err) => {res.send(err)})
-// });
 // Register
 app.post("/signup", async (req, res) => {
-console.log("r");
+
     // Our register logic starts here
     let encryptedPassword;
     try {
@@ -89,7 +78,7 @@ console.log("r");
         if (oldUser) {
             return res.status(409).send("User Already Exist. Please Login");
         }
-        console.log(password);
+
         //Encrypt user password
         encryptedPassword = await bcrypt.hash(password, 10);
 
@@ -98,6 +87,7 @@ console.log("r");
             name,
             email: email.toLowerCase(), // sanitize: convert email to lowercase
             password: encryptedPassword,
+            roles: "user"
         });
 
         // Create token
@@ -120,7 +110,7 @@ console.log("r");
 });
 
 // Login
-app.post("/login", async (req, res) => {
+app.post("/plogin", async (req, res) => {
 
     // Our login logic starts here
     try {
@@ -128,41 +118,30 @@ app.post("/login", async (req, res) => {
         const { email, password } = req.body;
 
         // Validate user input
-        if (!(email && password)) {
-            res.status(400).send("All input is required");
-        }
+        // if (!(email && password)) {
+        //     res.status(400).send("All input is required");
+        // }
         // Validate if user exist in our database
         const user = await User.findOne({ email });
 
-        if (user && (await bcrypt.compare(password, user.password))) {
-            // Create token
-            const token = jwt.sign(
-                { user_id: user._id, email },
-                process.env.TOKEN_KEY,
-                {
-                    expiresIn: "2h",
-                }
-            );
-
-            // save user token
-            user.token = token;
-
+        if (user !== null && (await bcrypt.compare(password, user.password))) {
             // user
             res.status(200).json(user);
+        }else{
+            res.send("Invalid Credentials");
         }
-        res.status(400).send("Invalid Credentials");
     } catch (err) {
         console.log(err);
     }
-    // Our register logic ends here
+
 });
-// app.get("/logout",(req,res)=>{
-//     req.logout();
-//     res.redirect("/");
-// });
+
 app.post("/buytickets", async (req, res) => {
-    // console.log("r");
-    // console.log(req.body);
+
+    const { usrMail, exhibitionId, respform} = req.body;
+
+    const user = await User.findOne({ usrMail });
+    const exhibition = await User.findOne({exhibitionId});
 
     const url = "www.google.fr";
 
@@ -173,7 +152,18 @@ app.post("/buytickets", async (req, res) => {
     // It shall be returned as a png image format
     // In case of an error, it will save the error inside the "err" variable and display it
     const doc = new PDFDocument();
-    doc.fontSize(27).text('This the article for GeeksforGeeks', 100, 100);
+
+    doc.fontSize(24).text('LazyArt Museum', 100, 100);
+    doc.fontSize(18).text(`${respform.firstname}${exhibition.name}`, 100, 200);
+    doc.fontSize(18).text(`${respform.firstname}${exhibition.name}`, 100, 225);
+    doc.fontSize(18).text(`${respform.firstname}${exhibition.name}`, 100, 250);
+
+
+    //const priceOver26 = req.body.usr.ticketOver26 * 8;
+
+    const finalPrice = req.body.respform.ticketOver26 * 8;
+    doc.fontSize(21).text(`Final price : ${finalPrice}€`, 100, 500);
+
     qr.toDataURL(url, (err, src) => {
         if (err) res.send("Error occured");
 
@@ -185,8 +175,6 @@ app.post("/buytickets", async (req, res) => {
         // });
         //res.render("scan", { src });
     });
-
-
 
     doc.end();
 
@@ -200,9 +188,9 @@ app.post("/buytickets", async (req, res) => {
 
     const mailOptions = {
         from: 'lazyartmuseum@gmail.com',
-        to: req.body.usr.mail,
-        subject: `Your ticket for the ${req.body.exhibition.name} exhibition`,
-        text: `Hello ${req.body.usr.firstname} ! There is your ticket for the ${req.body.exhibition.name} exhibition. 
+        to: respform.mail,
+        subject: `Your ticket for the ${exhibition.name} exhibition`,
+        text: `Hello ${respform.firstname} ! There is your ticket for the ${exhibition.name} exhibition.
         You will have to pay in the museum.`,
         attachments: [{
             filename: 'attachment.pdf',
@@ -218,7 +206,10 @@ app.post("/buytickets", async (req, res) => {
         }
     });
 
+    res.status(200);
+
 });
 
 app.get('/', (req, res) => { res.send('Welcome to my web server'); });
 app.use('/exhibitions', exhibitionRouter);
+app.use('/users', userRouter);

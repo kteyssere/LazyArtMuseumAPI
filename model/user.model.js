@@ -12,6 +12,10 @@ const userSchema = new mongoose.Schema({
     password: {
         type: String,
         required: true
+    },
+    roles: {
+        type: String,
+        required: true
     }
 }, {timestamps: true, collection: 'users'});
 userSchema.plugin(AutoIncrement, {inc_field: 'userId'});
