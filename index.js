@@ -162,19 +162,19 @@ app.post("/buytickets", async (req, res) => {
     const doc = new PDFDocument();
 
     doc.fontSize(24).text('LazyArt Museum', 100, 100);
-    doc.fontSize(16).text(`Lastname : ${respform.lastName} - Firstname : ${respform.firstname}`, 100, 200);
+    doc.fontSize(14).text(`Lastname : ${respform.lastName}, Firstname : ${respform.firstname}`, 100, 200);
     doc.fontSize(14).text(`Number of -26yo person : ${respform.ticketLess26}`, 100, 250);
-    doc.fontSize(14).text(`Number of +/=26yo person : ${respform.ticketOver26}`, 100, 300);
-    doc.fontSize(16).text(`Exhibition : ${exhibition.name} - Artist : ${exhibition.artist}`, 100, 400);
-    doc.fontSize(16).text(`Date : ${moment(exhibition.date).format('Do MMMM, YYYY')}`, 100, 450);
+    doc.fontSize(14).text(`Number of +/=26yo person : ${respform.ticketOver26}`, 100, 275);
+    doc.fontSize(16).text(`Exhibition : ${exhibition.name}, Artist : ${exhibition.artist}`, 100, 375);
+    doc.fontSize(16).text(`Date : ${moment(exhibition.date).format('Do MMMM, YYYY')}`, 100, 400);
 
 
         //const priceOver26 = req.body.usr.ticketOver26 * 8;
 
     const finalPrice = req.body.respform.ticketOver26 * 8;
-    doc.fontSize(18).text(`Final price : ${finalPrice}€`, 100, 600);
-    doc.fontSize(14).text(`Payment will be made at the reception of the museum.`, 100, 650);
-    doc.fontSize(14).text(`Please keep and bring this document during your visit`, 100, 700);
+    doc.fontSize(18).text(`Final price : ${finalPrice}€`, 100, 500);
+    doc.fontSize(14).text(`Payment will be made at the reception of the museum.`, 100, 550);
+    doc.fontSize(14).text(`Please keep and bring this document during your visit`, 100, 575);
 
     // qr.toDataURL(url, (err, src) => {
     //     if (err) res.send("Error occured");
