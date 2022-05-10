@@ -9,6 +9,7 @@ const exhibitionRouter = require('./routes/exhibition.router');
 const userRouter = require('./routes/user.router');
 const app = express();
 const User = require('./model/user.model');
+const Exhibition = require('./model/exhibition.model');
 const bcrypt = require('bcryptjs');
 const PORT = process.env.PORT || 8000;
 const nodemailer = require('nodemailer');
@@ -139,10 +140,10 @@ app.post("/plogin", async (req, res) => {
 app.post("/buytickets", async (req, res) => {
 
     try {
-    const { usrMail, exhibitionId, respform} = req.body;
+    const { exhibitionId, respform} = req.body;
 
     //const user = await User.findOne({ usrMail });
-    const exhibition = await User.findOne({exhibitionId});
+    const exhibition = await Exhibition.findOne({exhibitionId});
 
     //const url = "www.google.fr";
 
@@ -194,7 +195,7 @@ app.post("/buytickets", async (req, res) => {
         text: `Hello ${respform.firstname} ! There is your ticket for the ${exhibition.name} exhibition.
         You will have to pay in the museum.`,
         attachments: [{
-            filename: 'attachment.pdf',
+            filename: `ticket${exhibition.name}exhibition${respform.lastname}.pdf`,
             content: doc,
         }],
     };
@@ -202,10 +203,10 @@ app.post("/buytickets", async (req, res) => {
     await transporter.sendMail(mailOptions, function (error, info) {
         if (error) {
             console.log(error);
-            //res.status(500);
+            res.status(500);
         } else {
             console.log('Email sent: ' + info.response);
-            //res.status(200);
+            res.status(200);
         }
     });
 
