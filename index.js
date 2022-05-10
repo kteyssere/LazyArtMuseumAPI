@@ -140,10 +140,10 @@ app.post("/buytickets", async (req, res) => {
 
     const { usrMail, exhibitionId, respform} = req.body;
 
-    const user = await User.findOne({ usrMail });
+    //const user = await User.findOne({ usrMail });
     const exhibition = await User.findOne({exhibitionId});
 
-    const url = "www.google.fr";
+    //const url = "www.google.fr";
 
     // If the input is null return "Empty Data" error
     //if (url.length === 0) res.send("Empty Data!");
@@ -164,17 +164,17 @@ app.post("/buytickets", async (req, res) => {
     const finalPrice = req.body.respform.ticketOver26 * 8;
     doc.fontSize(21).text(`Final price : ${finalPrice}€`, 100, 500);
 
-    qr.toDataURL(url, (err, src) => {
-        if (err) res.send("Error occured");
-
-        // Let us return the QR code image as our response and set it to be the source used in the webpage
-        // doc.image(src, {
-        //     //fit: [300, 300],
-        //     align: 'center',
-        //     valign: 'center'
-        // });
-        //res.render("scan", { src });
-    });
+    // qr.toDataURL(url, (err, src) => {
+    //     if (err) res.send("Error occured");
+    //
+    //     // Let us return the QR code image as our response and set it to be the source used in the webpage
+    //     // doc.image(src, {
+    //     //     //fit: [300, 300],
+    //     //     align: 'center',
+    //     //     valign: 'center'
+    //     // });
+    //     //res.render("scan", { src });
+    // });
 
     doc.end();
 
