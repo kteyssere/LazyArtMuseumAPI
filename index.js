@@ -15,6 +15,7 @@ const PORT = process.env.PORT || 8000;
 const nodemailer = require('nodemailer');
 const PDFDocument = require('pdfkit');
 const qr = require("qrcode");
+const moment = require("moment");
 
 mongoose.connect(process.env.DB_CONNECTION)
 .then((res) => console.log('Connected to database'))
@@ -57,6 +58,11 @@ app.use((req, res, next) => {
     console.log(`Method: ${req.method}\nUrl: ${req.baseUrl}${req.url}\nTime: ${delta}ms\n`);
 });
 app.use(express.json());
+
+app.use((req, res, next)=>{
+    res.locals.moment = moment;
+    next();
+});
 
 // Register
 app.post("/signup", async (req, res) => {
@@ -160,7 +166,7 @@ app.post("/buytickets", async (req, res) => {
     doc.fontSize(14).text(`Number of -26yo person : ${respform.ticketLess26}`, 100, 250);
     doc.fontSize(14).text(`Number of +/=26yo person : ${respform.ticketOver26}`, 100, 300);
     doc.fontSize(16).text(`Exhibition : ${exhibition.name} - Artist : ${exhibition.artist}`, 100, 400);
-    doc.fontSize(16).text(`Date : ${exhibition.date}`, 100, 450);
+    doc.fontSize(16).text(`Date : ${moment(exhibition.date).format('Do MMMM, YYYY')}`, 100, 450);
 
 
         //const priceOver26 = req.body.usr.ticketOver26 * 8;
