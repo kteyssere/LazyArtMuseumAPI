@@ -41,6 +41,7 @@ function putExhibition(req, res) {
         artist: req.body.artist,
         picture: req.body.picture,
         date: req.body.date,
+        description: req.body.description,
     });
     exhibition.save()
         .then((result) => {
@@ -60,6 +61,7 @@ function postExhibition(req, res) {
         artist: req.body.artist,
         picture: req.body.picture,
         date: req.body.date,
+        description: req.body.description
     }).then((result) => {
         res.send(result);
     }).catch((err) => {

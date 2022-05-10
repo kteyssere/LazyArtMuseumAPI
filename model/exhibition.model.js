@@ -16,6 +16,10 @@ const exhibitionSchema = new mongoose.Schema({
     date: {
         type: Date,
         required: true
+    },
+    description: {
+        type: String,
+        required: true
     }
 }, {timestamps: true});
 exhibitionSchema.plugin(AutoIncrement, {inc_field: 'exhibitionId'});
