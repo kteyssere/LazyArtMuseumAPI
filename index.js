@@ -157,15 +157,17 @@ app.post("/buytickets", async (req, res) => {
 
     doc.fontSize(24).text('LazyArt Museum', 100, 100);
     doc.fontSize(18).text(`${respform.firstname} ${respform.lastname}`, 100, 200);
-    doc.fontSize(18).text(`${exhibition.name}`, 100, 225);
-    doc.fontSize(18).text(`By ${exhibition.artist}`, 100, 250);
+    doc.fontSize(14).text(`Number of -26yo person : ${respform.ticketLess26}`, 100, 210);
+    doc.fontSize(14).text(`Number of +/=26yo person : ${respform.ticketOver26}`, 100, 215);
+    doc.fontSize(18).text(`Exhibition ${exhibition.name}`, 100, 225);
+    doc.fontSize(18).text(`By ${exhibition.artist}`, 100, 230);
 
 
     //const priceOver26 = req.body.usr.ticketOver26 * 8;
 
     const finalPrice = req.body.respform.ticketOver26 * 8;
     doc.fontSize(21).text(`Final price : ${finalPrice}€`, 100, 500);
-    doc.fontSize(14).text(`You will pay at the museum`, 100, 450);
+    doc.fontSize(14).text(`You will pay at the museum`, 100, 510);
 
     // qr.toDataURL(url, (err, src) => {
     //     if (err) res.send("Error occured");
