@@ -138,6 +138,7 @@ app.post("/plogin", async (req, res) => {
 
 app.post("/buytickets", async (req, res) => {
 
+    try {
     const { usrMail, exhibitionId, respform} = req.body;
 
     //const user = await User.findOne({ usrMail });
@@ -201,14 +202,16 @@ app.post("/buytickets", async (req, res) => {
     await transporter.sendMail(mailOptions, function (error, info) {
         if (error) {
             console.log(error);
-            res.status(500);
+            //res.status(500);
         } else {
             console.log('Email sent: ' + info.response);
-            res.status(200);
+            //res.status(200);
         }
     });
 
-
+    } catch (err) {
+        console.log(err);
+    }
 
 });
 
