@@ -167,7 +167,7 @@ app.post("/buytickets", async (req, res) => {
 
     const finalPrice = req.body.respform.ticketOver26 * 8;
     doc.fontSize(21).text(`Final price : ${finalPrice}€`, 100, 500);
-    doc.fontSize(14).text(`You will pay at the museum`, 100, 510);
+    doc.fontSize(14).text(`You will pay at the museum`, 100, 550);
 
     // qr.toDataURL(url, (err, src) => {
     //     if (err) res.send("Error occured");
