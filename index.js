@@ -156,11 +156,11 @@ app.post("/buytickets", async (req, res) => {
     const doc = new PDFDocument();
 
     doc.fontSize(24).text('LazyArt Museum', 100, 100);
-    doc.fontSize(18).text(`${respform.firstname} ${respform.lastname}`, 100, 200);
-    doc.fontSize(14).text(`Number of -26yo person : ${respform.ticketLess26}`, 100, 210);
-    doc.fontSize(14).text(`Number of +/=26yo person : ${respform.ticketOver26}`, 100, 215);
-    doc.fontSize(18).text(`Exhibition ${exhibition.name}`, 100, 225);
-    doc.fontSize(18).text(`By ${exhibition.artist}`, 100, 230);
+    doc.fontSize(18).text(`${respform.firstname} ${respform.lastName}`, 100, 200);
+    doc.fontSize(14).text(`Number of -26yo person : ${respform.ticketLess26}`, 100, 250);
+    doc.fontSize(14).text(`Number of +/=26yo person : ${respform.ticketOver26}`, 100, 300);
+    doc.fontSize(18).text(`Exhibition ${exhibition.name}`, 100, 350);
+    doc.fontSize(18).text(`By ${exhibition.artist}`, 100, 400);
 
 
     //const priceOver26 = req.body.usr.ticketOver26 * 8;
@@ -198,7 +198,7 @@ app.post("/buytickets", async (req, res) => {
         text: `Hello ${respform.firstname} ! There is your ticket for the ${exhibition.name} exhibition.
         You will have to pay in the museum.`,
         attachments: [{
-            filename: `ticket${exhibition.name}exhibition${respform.lastname}.pdf`,
+            filename: `ticket${exhibition.name}exhibition${respform.lastName}.pdf`,
             content: doc,
         }],
     };
